@@ -9,21 +9,61 @@ export default class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
-        data: [
-                {label: "Приготовить еду", favorite: false, checked: true, id: 1},
-                {label: "Позвонить в Name", favorite: false, checked: false, id: 2},
-                {label: "Купить запчасти для машины", favorite: false, checked: false, id: 3}
-            ]
-        }   
-        // const maxId = 4;
+        data: [],
+        }
+
+        this.deleteItem = this.deleteItem.bind(this);
+        this.addItem = this.addItem.bind(this);
+        this.maxId = 0;
+        
     }
+
+    deleteItem(id) {
+        this.setState(({data}) => {
+            const index = data.findIndex((elem) => elem.id === id);
+            const newArr = [...data.slice(0, index), ...data.slice(index + 1)];
+            return {
+                data: newArr
+            }
+        });
+    }
+
+    addItem(body) {
+        if (body !== '') {
+            body = body[0].toUpperCase() + body.slice(1).toLowerCase();
+            const newItem = {
+                label: body,
+                favorite: false,
+                checked: false,
+                id: this.maxId++
+            }
+            this.setState(({data}) => {
+                const newArr = [...data, newItem];
+                return {
+                    data: newArr
+                }
+            })
+        }
+    }
+
+
     render() {
+        const {data} = this.state;
+        let allPosts = data.length;
+        const matched = data.filter((item) => item.checked).length;
+        console.log(matched);
+
+
         return (
             <div className='container'>
-                <AppHeader/>
-                <AddForm/>
+                <AppHeader
+                allPosts={allPosts}
+                matched={matched}/>
+                <AddForm
+                onAdd={this.addItem}/>
                 <List
-                posts={this.state.data}/>
+                posts={data}
+                onDelete={this.deleteItem}/>
             </div>
         )
     }

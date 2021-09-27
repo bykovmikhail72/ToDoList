@@ -10,6 +10,7 @@ const List = ({posts, onDelete}) => {
             <li key={id} className="posts">
                 <ListItem
                 {...itemProps}
+                onDelete={() => {onDelete(id)}}
                 />
             </li>
         )

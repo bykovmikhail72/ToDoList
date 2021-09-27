@@ -26,7 +26,7 @@ export default class ListItem extends Component {
     }
 
     render() {
-        const {label} = this.props;
+        const {label, onDelete} = this.props;
         const {favorite, checked} = this.state;
         let classNamesFav = "post__fav fas fa-star";
         let classNamesChecked = "post__checked far fa-check-square";
@@ -43,7 +43,7 @@ export default class ListItem extends Component {
         }
 
         return (
-            <li className="post">
+            <div className="post">
                 <div className={classNamesText}>{label}</div>
                 <div className="btn-container">
                     <i 
@@ -52,9 +52,11 @@ export default class ListItem extends Component {
                     <i 
                     className={classNamesChecked}
                     onClick={this.onChecked}></i>
-                    <i className="post__trash fas fa-trash-alt"></i>
+                    <i 
+                    className="post__trash fas fa-trash-alt"
+                    onClick={onDelete}></i>
                 </div>
-            </li>
+            </div>
         )
     }
 }
