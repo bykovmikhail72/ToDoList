@@ -19,14 +19,16 @@ export default class AddForm extends Component {
     }
 
     onSubmit(e) {
+        const {text} = this.state;
         e.preventDefault();
-        this.props.onAdd(this.state.text);
+        this.props.onAdd(text);
         this.setState({
             text: ''
         })
     }
 
     render() {
+        const {text} = this.state;
         return (
             <form className="add-form"
             onSubmit={this.onSubmit}>
@@ -35,7 +37,7 @@ export default class AddForm extends Component {
                 placeholder=" Добавить новую задачу" 
                 type="text"
                 onChange={this.onChange}
-                value={this.state.text}/>
+                value={text}/>
                 <button 
                 className="add-form__btn" 
                 type="submit">+</button>

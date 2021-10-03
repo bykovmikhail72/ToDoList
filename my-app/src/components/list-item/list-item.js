@@ -3,19 +3,10 @@ import React, { Component } from "react";
 import './list-item.sass';
 
 export default class ListItem extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            favorite: false,
-            checked: false
-        }
-        this.onFavorite = this.onFavorite.bind(this);
-        this.onChecked = this.onChecked.bind(this);
-    }
 
     onFavorite() {
-        this.setState(({favorite}) => ({
-            favorite: !favorite
+        this.setState(({important}) => ({
+            important: !important
         })) 
     }
 
@@ -26,13 +17,13 @@ export default class ListItem extends Component {
     }
 
     render() {
-        const {label, onDelete} = this.props;
-        const {favorite, checked} = this.state;
+        const {label, onDelete, onToggleMatched, onToggleImportant, important, checked} = this.props;
+        
         let classNamesFav = "post__fav fas fa-star";
         let classNamesChecked = "post__checked far fa-check-square";
         let classNamesText = "post__text";
  
-        if (favorite) {
+        if (important) {
             classNamesFav += " favorite"
             classNamesText += " favorite"
         }
@@ -44,14 +35,16 @@ export default class ListItem extends Component {
 
         return (
             <div className="post">
-                <div className={classNamesText}>{label}</div>
+                <div 
+                className={classNamesText}
+                >{label}</div>
                 <div className="btn-container">
                     <i 
                     className={classNamesFav}
-                    onClick={this.onFavorite}></i>
+                    onClick={onToggleImportant}></i>
                     <i 
                     className={classNamesChecked}
-                    onClick={this.onChecked}></i>
+                    onClick={onToggleMatched}></i>
                     <i 
                     className="post__trash fas fa-trash-alt"
                     onClick={onDelete}></i>

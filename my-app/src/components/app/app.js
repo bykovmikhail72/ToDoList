@@ -14,6 +14,8 @@ export default class App extends Component {
 
         this.deleteItem = this.deleteItem.bind(this);
         this.addItem = this.addItem.bind(this);
+        this.onToggleMatched = this.onToggleMatched.bind(this);
+        this.onToggleImportant = this.onToggleImportant.bind(this);
         this.maxId = 0;
         
     }
@@ -31,9 +33,10 @@ export default class App extends Component {
     addItem(body) {
         if (body !== '') {
             body = body[0].toUpperCase() + body.slice(1).toLowerCase();
+            
             const newItem = {
                 label: body,
-                favorite: false,
+                important: false,
                 checked: false,
                 id: this.maxId++
             }
@@ -46,24 +49,72 @@ export default class App extends Component {
         }
     }
 
+    onToggleMatched(id) {
+        this.setState(({data}) => {
+            let index = data.findIndex(item => item.id === id);
+
+            const old = data[index];
+            const newItem = {...old, checked: !old.checked};
+
+            const newArr = [...data.slice(0, index), ...data.slice(index + 1), newItem];
+            return {
+                data: newArr
+            }
+        })
+    }
+
+    onToggleImportant(id) {
+        this.setState(({data}) => {
+            let index = data.findIndex(item => item.id === id);
+
+            const old = data[index];
+            const newItem = {...old, important: !old.important};
+            const newArr = [...data.slice(0, index), newItem, ...data.slice(index + 1)];
+            return {
+                data: newArr
+            }
+        })
+    }
+
+    componentDidUpdate(prevState) {
+        if (this.state !== prevState) {
+            const {data} = this.state;
+            localStorage.setItem('posts', JSON.stringify(data));
+            console.log(JSON.parse(localStorage.getItem('posts')));
+            console.log({data});
+        }
+    }
+
+    componentDidMount() {
+        const posts = localStorage.getItem('posts');
+        const newArr = JSON.parse(posts);
+        if (localStorage.getItem('posts')) {
+            this.setState({
+                data: newArr
+            })
+        }
+    }
 
     render() {
         const {data} = this.state;
         let allPosts = data.length;
         const matched = data.filter((item) => item.checked).length;
-        console.log(matched);
+        const important = data.filter((item) => item.important).length;
 
 
         return (
             <div className='container'>
                 <AppHeader
                 allPosts={allPosts}
-                matched={matched}/>
+                matched={matched}
+                important={important}/>
                 <AddForm
                 onAdd={this.addItem}/>
                 <List
                 posts={data}
-                onDelete={this.deleteItem}/>
+                onDelete={this.deleteItem}
+                onToggleMatched={this.onToggleMatched}
+                onToggleImportant={this.onToggleImportant}/>
             </div>
         )
     }
