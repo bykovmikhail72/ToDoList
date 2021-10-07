@@ -21,10 +21,10 @@ export default class ListItem extends Component {
         
         let classNamesFav = "post__fav fas fa-star";
         let classNamesChecked = "post__checked far fa-check-square";
-        let classNamesText = "post__text";
+        let classNamesText = "post";
  
         if (important) {
-            classNamesFav += " favorite"
+            classNamesFav += " fav-star"
             classNamesText += " favorite"
         }
 
@@ -34,9 +34,9 @@ export default class ListItem extends Component {
         }
 
         return (
-            <div className="post">
+            <div className={classNamesText}>
                 <div 
-                className={classNamesText}
+                className="post__text"
                 >{label}</div>
                 <div className="btn-container">
                     <i 

@@ -9,7 +9,7 @@ export default class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
-        data: [],
+            data: []
         }
 
         this.deleteItem = this.deleteItem.bind(this);
@@ -51,7 +51,7 @@ export default class App extends Component {
 
     onToggleMatched(id) {
         this.setState(({data}) => {
-            let index = data.findIndex(item => item.id === id);
+            const index = data.findIndex(item => item.id === id);
 
             const old = data[index];
             const newItem = {...old, checked: !old.checked};
@@ -65,7 +65,7 @@ export default class App extends Component {
 
     onToggleImportant(id) {
         this.setState(({data}) => {
-            let index = data.findIndex(item => item.id === id);
+            const index = data.findIndex(item => item.id === id);
 
             const old = data[index];
             const newItem = {...old, important: !old.important};
@@ -80,15 +80,13 @@ export default class App extends Component {
         if (this.state !== prevState) {
             const {data} = this.state;
             localStorage.setItem('posts', JSON.stringify(data));
-            console.log(JSON.parse(localStorage.getItem('posts')));
-            console.log({data});
         }
     }
 
     componentDidMount() {
         const posts = localStorage.getItem('posts');
         const newArr = JSON.parse(posts);
-        if (localStorage.getItem('posts')) {
+        if (posts) {
             this.setState({
                 data: newArr
             })
@@ -97,7 +95,7 @@ export default class App extends Component {
 
     render() {
         const {data} = this.state;
-        let allPosts = data.length;
+        const allPosts = data.length;
         const matched = data.filter((item) => item.checked).length;
         const important = data.filter((item) => item.important).length;
 
@@ -105,16 +103,19 @@ export default class App extends Component {
         return (
             <div className='container'>
                 <AppHeader
-                allPosts={allPosts}
-                matched={matched}
-                important={important}/>
+                    allPosts={allPosts}
+                    matched={matched}
+                    important={important}
+                />
                 <AddForm
-                onAdd={this.addItem}/>
+                    onAdd={this.addItem}
+                />
                 <List
-                posts={data}
-                onDelete={this.deleteItem}
-                onToggleMatched={this.onToggleMatched}
-                onToggleImportant={this.onToggleImportant}/>
+                    posts={data}
+                    onDelete={this.deleteItem}
+                    onToggleMatched={this.onToggleMatched}
+                    onToggleImportant={this.onToggleImportant}
+                />
             </div>
         )
     }
